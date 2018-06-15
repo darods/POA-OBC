@@ -1,4 +1,8 @@
-//Modificacion codigo de original de : Korneliusz Jarzebski
+/*Modificacion codigo de original de : Korneliusz Jarzebski
+ * Nota : las variables estan en ingles, pues seria una perdida de tiempo
+ * pasar cosas como realPressure a PresionReal, al final los que modifican el codigo
+ * por lo general saben ingles
+ */
 #include <Wire.h>
 #include <MS5611.h>
 
