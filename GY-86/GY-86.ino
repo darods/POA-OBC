@@ -48,17 +48,17 @@ void loop() {
   float absoluteAltitude = ms5611.getAltitude(realPressure);
   float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
 
-  Serial.print("=================================================================\n\n "); 
+   //Giroscopio
   Serial.print("Pitch : "); 
   Serial.print(mpu6050.getAngleX());
   Serial.print("\tRoll : ");
   Serial.print(mpu6050.getAngleY());
   Serial.print("\tYaw : ");
   Serial.print(mpu6050.getAngleZ());
-  Serial.println("\n");
-  Serial.print(" absoluteAltitude = ");
+  //Altura
+  Serial.print("\t A Absoluta = ");
   Serial.print(absoluteAltitude);
-  Serial.print(" m, \trelativeAltitude = ");
+  Serial.print(" m, \tA Relativa = ");
   Serial.print(relativeAltitude);    
   Serial.println(" m");
   
