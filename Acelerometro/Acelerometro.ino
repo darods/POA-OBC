@@ -15,16 +15,10 @@ void setup() {
 void loop() {
   mpu6050.update();
  
-    Serial.print("accX : ");Serial.print(mpu6050.getAccX());
-    Serial.print("\taccY : ");Serial.print(mpu6050.getAccY());
-    Serial.print("\taccZ : ");Serial.println(mpu6050.getAccZ());
+ 
 
-  
-   
-   
-   
-    
-    
-  
+ if(mpu6050.getAccZ()>=1.9){
+  Serial.println("CAIDA LIBRE DETECTADA");
+ }
 
 }
