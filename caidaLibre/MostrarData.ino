@@ -10,5 +10,6 @@ void mostrarData(){
   Serial.print(" Presion = ");
   Serial.print(bmp.readPressure());
   Serial.print(" Altura = ");
-  Serial.println(bmp.readAltitude(745.24));//https://keisan.casio.com/exec/system/1224579725
+  Serial.print(bmp.readAltitude(745.24));//https://keisan.casio.com/exec/system/1224579725
+  Serial.print(" CL = ");
   }
