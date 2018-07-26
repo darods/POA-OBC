@@ -1,9 +1,6 @@
 /*
-    MPU6050 Triple Axis Gyroscope & Accelerometer. Pitch & Roll & Yaw Gyroscope Example.
-    Read more: http://www.jarzebski.pl/arduino/czujniki-i-sensory/3-osiowy-zyroskop-i-akcelerometr-mpu6050.html
-    GIT: https://github.com/jarzebski/Arduino-MPU6050
-    Web: http://www.jarzebski.pl
-    (c) 2014 by Korneliusz Jarzebski
+MPU6050 : https://github.com/jarzebski/Arduino-MPU6050 by Korneliusz Jarzebski
+BMP280 :  https://github.com/adafruit/Adafruit_BMP280_Library by Adafruit Industries
 */
 
 #include <Wire.h>
@@ -12,32 +9,33 @@
 #include <Adafruit_BMP280.h>
 
 
-MPU6050 mpu;
-
 // Timers
-unsigned long timer = 0;
-float timeStep = 0.01;
+float timeStep = 0.1;
 
 // Pitch, Roll and Yaw values
 float pitch = 0;
 float roll = 0;
 float yaw = 0;
 
+//variables caida libre
 boolean ledState = false;
 boolean freefallDetected = false;
 int freefallBlinkCount = 0;
-
+//algo del BMP280, creo que son direcciones de registro
 #define BMP_SCK 13
 #define BMP_MISO 12
 #define BMP_MOSI 11 
 #define BMP_CS 10
 
-Adafruit_BMP280 bmp; // I2C
+//conectados de manera I2C
+MPU6050 mpu;
+Adafruit_BMP280 bmp; 
 
 void setup() 
 {
   Serial.begin(115200);
   
+  //inicio BMP280
   if (!bmp.begin()) {  
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     while (1);
@@ -49,6 +47,7 @@ void setup()
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
+
   
   // Calibrate gyroscope. The calibration must be at rest.
   // If you don't want calibrate, comment this line.
@@ -59,7 +58,7 @@ void setup()
   mpu.setThreshold(3);
 
 
-   mpu.setAccelPowerOnDelay(MPU6050_DELAY_3MS);
+  mpu.setAccelPowerOnDelay(MPU6050_DELAY_3MS);
   
   mpu.setIntFreeFallEnabled(true);
   mpu.setIntZeroMotionEnabled(false);
@@ -80,12 +79,11 @@ void setup()
 
 void loop()
 {
-  
-
-  // Read normalized values
+  // Read normalized values gyro
   Vector norm = mpu.readNormalizeGyro();
-
+ // lee la aceleracion
   Vector rawAccel = mpu.readRawAccel();
+  //lee la actividad xd
   Activites act = mpu.readActivites();
 
   // Calculate Pitch, Roll and Yaw
@@ -95,7 +93,7 @@ void loop()
 
   // Output raw
   mostrarData();
-  Serial.println(act.isFreeFall);
+  Serial.println(act.isFreeFall);// 1 si es caida libre, cero si no
   
 
   if (freefallDetected)
