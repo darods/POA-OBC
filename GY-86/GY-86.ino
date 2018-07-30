@@ -20,6 +20,22 @@ MS5611 ms5611;
 
 double referencePressure;
 
+
+//Variables
+uint32_t rawTemp ;
+uint32_t rawPressure;
+
+  // Read true temperature & Pressure
+double realTemperature;
+long realPressure;
+
+  // Calculate altitude
+float absoluteAltitude;
+float relativeAltitude;
+
+
+
+
 void setup() 
 {
   Serial.begin(115200);
@@ -69,27 +85,9 @@ void setup()
   attachInterrupt(0, doInt, RISING);
 }
 
-void checkSettings1()
-{
-  Serial.print("Oversampling: ");
-  Serial.println(ms5611.getOversampling());
-}
 
 void loop()
-{
-  // Read raw values
-  uint32_t rawTemp = ms5611.readRawTemperature();
-  uint32_t rawPressure = ms5611.readRawPressure();
-
-  // Read true temperature & Pressure
-  double realTemperature = ms5611.readTemperature();
-  long realPressure = ms5611.readPressure();
-
-  // Calculate altitude
-  float absoluteAltitude = ms5611.getAltitude(realPressure);
-  float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
-
-  
+{  
   // Read normalized values gyro
   Vector norm = mpu.readNormalizeGyro();
  // lee la aceleracion
@@ -102,27 +100,11 @@ void loop()
   roll = roll + norm.XAxis * timeStep;
   yaw = yaw + norm.ZAxis * timeStep;
 
+  MS5611Datos();
   // Output raw
   mostrarData();
-  Serial.print(act.isFreeFall);// 1 si es caida libre, cero si no
+  Serial.println(act.isFreeFall);// 1 si es caida libre, cero si no
 
-  Serial.print(" rawTemp = ");
-  Serial.print(rawTemp);
-  Serial.print(", realTemp = ");
-  Serial.print(realTemperature);
-  Serial.print(" *C");
-
-  Serial.print(" rawPressure = ");
-  Serial.print(rawPressure);
-  Serial.print(", realPressure = ");
-  Serial.print(realPressure);
-  Serial.print(" Pa");
-
-  Serial.print(" absoluteAltitude = ");
-  Serial.print(absoluteAltitude);
-  Serial.print(" m, relativeAltitude = ");
-  Serial.print(relativeAltitude);    
-  Serial.println(" m");
   
 
   if (freefallDetected)
