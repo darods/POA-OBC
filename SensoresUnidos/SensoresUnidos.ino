@@ -1,3 +1,9 @@
+/*
+MPU6050 : https://github.com/jarzebski/Arduino-MPU6050 by Korneliusz Jarzebski
+MS5611 :  https://github.com/jarzebski/Arduino-MS5611 by Korneliusz Jarzebski
+Sensor que se usa : GY-86
+*/
+
 #include <Wire.h>
 #include <MPU6050.h>
 #include <MS5611.h>
@@ -15,30 +21,22 @@ boolean ledState = false;
 boolean freefallDetected = false;
 int freefallBlinkCount = 0;
 
-MPU6050 mpu;
-MS5611 ms5611;
-
-double referencePressure;
-
-
-//Variables
+//Variables MS5611
 uint32_t rawTemp ;
 uint32_t rawPressure;
-
-  // Read true temperature & Pressure
 double realTemperature;
 long realPressure;
-
-  // Calculate altitude
 float absoluteAltitude;
 float relativeAltitude;
+double referencePressure;
 
-
-
+MPU6050 mpu;
+MS5611 ms5611;
 
 void setup() 
 {
   Serial.begin(115200);
+  
   // Initialize MS5611
   while(!ms5611.begin())
   {
@@ -52,10 +50,12 @@ void setup()
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
+   
+   
    // Get reference pressure for relative altitude
   referencePressure = ms5611.readPressure();
   // Check settings
-  checkSettings1();
+  checkSettingsMS5611();
   
   // Calibrate gyroscope. The calibration must be at rest.
   // If you don't want calibrate, comment this line.
@@ -77,7 +77,7 @@ void setup()
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
   
-  checkSettings();
+  checkSettingsMPU6050();
 
   pinMode(4, OUTPUT);
   digitalWrite(4, LOW);

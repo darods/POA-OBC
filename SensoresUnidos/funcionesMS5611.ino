@@ -1,4 +1,4 @@
-void checkSettings1()
+void checkSettingsMS5611()
 {
   Serial.print("Oversampling: ");
   Serial.println(ms5611.getOversampling());

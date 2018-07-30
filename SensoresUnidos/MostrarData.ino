@@ -13,18 +13,15 @@ void mostrarData(){
   Serial.print(", realTemp = ");
   Serial.print(realTemperature);
   Serial.print(" *C");
-
   Serial.print(" rawPressure = ");
   Serial.print(rawPressure);
   Serial.print(", realPressure = ");
   Serial.print(realPressure);
   Serial.print(" Pa");
-
   Serial.print(" absoluteAltitude = ");
   Serial.print(absoluteAltitude);
   Serial.print(" m, relativeAltitude = ");
   Serial.print(relativeAltitude);    
-  Serial.print(" m");
-  
+  Serial.print(" m"); 
   Serial.print(" CL = ");
   }

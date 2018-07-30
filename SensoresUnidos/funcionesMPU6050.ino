@@ -4,7 +4,7 @@ void doInt()
   freefallDetected = true;  
 }
 
-void checkSettings()
+void checkSettingsMPU6050()
 {
   Serial.println();
   
