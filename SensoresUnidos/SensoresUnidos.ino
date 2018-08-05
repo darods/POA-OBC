@@ -8,6 +8,7 @@ Sensor que se usa : GY-86
 #include <MPU6050.h>
 #include <MS5611.h>
 
+
 // Timers
 float timeStep = 0.1;
 
@@ -35,7 +36,7 @@ MS5611 ms5611;
 
 void setup() 
 {
-  Serial.begin(115200);
+  Serial.begin(38400);
   
   // Initialize MS5611
   while(!ms5611.begin())

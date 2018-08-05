@@ -6,8 +6,8 @@ void checkSettingsMS5611()
 
 void MS5611Datos(){
   // Read raw values
-  rawTemp = ms5611.readRawTemperature();
-  rawPressure = ms5611.readRawPressure();
+  //rawTemp = ms5611.readRawTemperature();
+  //rawPressure = ms5611.readRawPressure();
 
   // Read true temperature & Pressure
   realTemperature = ms5611.readTemperature();
