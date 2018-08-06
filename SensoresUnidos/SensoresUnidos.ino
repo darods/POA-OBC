@@ -9,9 +9,10 @@ Sensor que se usa : GY-86
 #include <MS5611.h>
 #include <SD.h>
 #include <SPI.h>
+#include "I2Cdev.h"
 
 File myFile;
-int pinCS = 10; // Pin 10 on Arduino Uno
+int pinCS = 4; // Pin 4 on Arduino Uno
 
 // Timers
 float timeStep = 0.1;
@@ -21,14 +22,9 @@ float pitch = 0;
 float roll = 0;
 float yaw = 0;
 
-/*variables caida libre
-boolean ledState = false;
-boolean freefallDetected = false;
-int freefallBlinkCount = 0;
-*/
+
 //Variables MS5611
-uint32_t rawTemp ;
-uint32_t rawPressure;
+
 double realTemperature;
 long realPressure;
 float absoluteAltitude;
@@ -40,7 +36,13 @@ MS5611 ms5611;
 
 void setup() 
 {
-  Serial.begin(38400);
+    // join I2C bus (I2Cdev library doesn't do this automatically)
+    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+        Wire.begin();
+    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+        Fastwire::setup(400, true);
+    #endif
+  Serial.begin(9600);
 
   pinMode(pinCS, OUTPUT);
   
@@ -90,12 +92,10 @@ void setup()
   mpu.setIntMotionEnabled(false);
   
   mpu.setDHPFMode(MPU6050_DHPF_5HZ);
-
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
   
   checkSettingsMPU6050();
-
   pinMode(4, OUTPUT);
   digitalWrite(4, LOW);
   
@@ -105,13 +105,13 @@ void setup()
 
 void loop()
 {  
-  // Read normalized values gyro
-  Vector norm = mpu.readNormalizeGyro();
- // lee la aceleracion
+ //Read normalized values gyro
+ Vector norm = mpu.readNormalizeGyro();
+ /* lee la aceleracion
   Vector rawAccel = mpu.readRawAccel();
   //lee la actividad xd
   Activites act = mpu.readActivites();
-
+  */
   // Calculate Pitch, Roll and Yaw
   pitch = pitch + norm.YAxis * timeStep;
   roll = roll + norm.XAxis * timeStep;
@@ -119,12 +119,21 @@ void loop()
 
   MS5611Datos();
   // Output raw
-  mostrarData();
-  //Serial.println(act.isFreeFall);// 1 si es caida libre, cero si no
+  String coma = String(',');
+  String Pitch = String(pitch);
+  String Roll = String(roll);
+  String Yaw = String(yaw);
+  String Temp = String(realTemperature);
+  String Presion = String(realPressure);
+  String Altura = String(relativeAltitude);
+  String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Temp+coma+Presion+coma+Altura);
+  Serial.println(datos);
+  
 
   myFile = SD.open("test.txt", FILE_WRITE);
   if (myFile) {    
-    mostrarDataSD();
+    myFile.println(datos);
+    myFile.close();
   }
   // if the file didn't open, print an error:
   else {
@@ -134,11 +143,8 @@ void loop()
   /*if (freefallDetected)
   {
     ledState = !ledState;
-
     digitalWrite(4, ledState);
-
     freefallBlinkCount++;
-
     if (freefallBlinkCount == 20)
     {
       freefallDetected = false;
@@ -151,5 +157,3 @@ void loop()
   // Wait to full timeStep period
   delay(50);
 }
-
-

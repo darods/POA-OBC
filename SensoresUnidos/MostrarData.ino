@@ -1,4 +1,4 @@
-void mostrarData(){
+/*void mostrarData(){
   Serial.print(" Pitch = ");
   Serial.print(pitch);
   Serial.print(" Roll = ");
@@ -36,7 +36,7 @@ void mostrarData(){
     myFile.println(realTemperature);
     myFile.print(","); 
     myFile.println(realPressure);
-    myFile.print(","); 
-    myFile.println(relativeAltitude);
+    //myFile.print(","); 
+    //myFile.println(relativeAltitude);
     myFile.close(); // close the file
-    }
+    }*/
