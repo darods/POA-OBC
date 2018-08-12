@@ -22,11 +22,12 @@ MPU6050 mpu;
 MS5611 ms5611;
 
 
+
 //Varaibles MS5611
 double referencePressure;
 
 void setup()
-{ Serial.begin(115200);
+{ Serial.begin(38400);
 
 // SD Card Initialization
   pinMode(pinCS, OUTPUT);  
@@ -94,8 +95,9 @@ void loop()
   String Temp2 = String(realTemperature); 
   String Presion = String(realPressure);
   String Altura = String(relativeAltitude); 
+  String timer = String (millis());
   
-  String datos = String(Pitch+coma+Roll+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura);
+  String datos = String(Pitch+coma+Roll+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+timer);
   Serial.println(datos);
   
   //Guarda los datos en la tarjeta SD
