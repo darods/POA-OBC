@@ -60,19 +60,19 @@ void setup()
     pinMode(LED_PIN, OUTPUT);
     
 //    Serial.print("Initializing SD card...");
-  if (!SD.begin(chipSelect)) {// see if the card is present and can be initialized:
+  //if (!SD.begin(chipSelect)) {// see if the card is present and can be initialized:
  // Serial.println("Card failed, or not present");
   // don't do anything more:
-  return;
-  }
+  //return;
+  //}
  // Serial.println("card initialized.");
 
 }
 
 void checkSettings()
 {
- // Serial.print("Oversampling: ");
- // Serial.println(ms5611.getOversampling());
+  Serial.print("Oversampling: ");
+  Serial.println(ms5611.getOversampling());
 }
 
 void loop()
@@ -104,21 +104,19 @@ String timer = String (millis()); //puts a millis time stamp on each string.
 //make a big string containing above strings
 String Baro_data = String  (absalt + comma + temp + comma + realpressure + comma + accelXraw + comma + timer) ;
 
-Serial.println (Baro_data);
-File dataFile= SD.open("datalog.txt", FILE_WRITE);
-      // if the file is available, write to it:
-      if (dataFile) {
-      dataFile.println(Baro_data);//put Baro_data on the SD card
-      dataFile.close();
-      
-      /*if (millis() > 10000) //change this number to change alarm delay (1s = 1000ms)
-      {tone (8,1000); // change the second number to alter the tone of the peizo alarm
-   
-      
-    
-  }
-      else{ noTone(8);}*/
 
-}delay(50);
+Serial.println (Baro_data);
+/*File dataFile= SD.open("datalog.txt", FILE_WRITE);
+      // if the file is available, write to it:
+if (dataFile) {
+  dataFile.println(Baro_data);//put Baro_data on the SD card
+  dataFile.close();
+  if (millis() > 10000){ //change this number to change alarm delay (1s = 1000ms)
+  tone (8,1000); // change the second number to alter the tone of the peizo alarm 
+  }
+  else{ noTone(8);}
+
+}*/
+delay(50);
 
 }
