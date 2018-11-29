@@ -33,7 +33,7 @@ void setup()
     #endif
 
   
-  Serial.begin(9600);
+  Serial.begin(38400);
 
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
@@ -105,19 +105,20 @@ String timer = String (millis()); //puts a millis time stamp on each string.
 String Baro_data = String  (absalt + comma + temp + comma + realpressure + comma + accelXraw + comma + timer) ;
 
 Serial.println (Baro_data);
-//delay(500); 
 File dataFile= SD.open("datalog.txt", FILE_WRITE);
       // if the file is available, write to it:
       if (dataFile) {
       dataFile.println(Baro_data);//put Baro_data on the SD card
       dataFile.close();
       
-      if (millis() > 10000) //change this number to change alarm delay (1s = 1000ms)
+      /*if (millis() > 10000) //change this number to change alarm delay (1s = 1000ms)
       {tone (8,1000); // change the second number to alter the tone of the peizo alarm
    
       
     
   }
-      else{ noTone(8);}
+      else{ noTone(8);}*/
 
-}}
+}delay(50);
+
+}
