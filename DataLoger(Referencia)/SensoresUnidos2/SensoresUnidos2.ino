@@ -1,4 +1,4 @@
-
+//usar libreria mpu6050 jrowberg
 #include <Wire.h>
 #include <MS5611.h>
 #include "I2Cdev.h"
