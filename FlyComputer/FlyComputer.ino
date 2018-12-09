@@ -22,7 +22,6 @@ MPU6050 mpu;
 MS5611 ms5611;
 
 
-
 //Varaibles MS5611
 double referencePressure;
 
@@ -42,17 +41,19 @@ void setup()
   }
   
   // Initialize MPU6050
-  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
+  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
+  //calibrando gyro
+  mpu.calibrateGyro();
 
   
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
 
-  while(!ms5611.begin())
+  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
   {
     Serial.println("Could not find a valid MS5611 sensor, check wiring!");
     delay(500);
@@ -71,18 +72,21 @@ void setup()
 void loop()
 {  // Calcula los valores del MPU6050
   Vector normAccel = mpu.readNormalizeAccel();
-  int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
+  //int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
+  int pitch = mpu.getGyroOffsetX();
   int roll = (atan2(normAccel.YAxis, normAccel.ZAxis)*180.0)/M_PI;
+  
   float tempMPU6050 = mpu.readTemperature();
 
   // Calcula los valores del MS5611
   // Read true temperature & Pressure
-  double realTemperature = ms5611.readTemperature();
-  long realPressure = ms5611.readPressure();
+  double realTemperature = ms5611.readTemperature(true);
+  long realPressure = ms5611.readPressure(true);
 
   // Calculate altitude
   float absoluteAltitude = ms5611.getAltitude(realPressure);
   float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
+  if(relativeAltitude < -2){relativeAltitude = 0;}
  
  //Pone todos los valores como una cadena
   String coma = String(',');
