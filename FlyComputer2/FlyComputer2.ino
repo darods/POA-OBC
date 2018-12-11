@@ -31,6 +31,9 @@ int freefallBlinkCount = 0;
 MPU6050 mpu;
 Adafruit_BMP280 bmp; 
 
+
+float referencia;
+
 void setup() 
 {
   Serial.begin(115200);
@@ -42,7 +45,7 @@ void setup()
   }
 
   // Initialize MPU6050
-  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
+  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
@@ -75,6 +78,7 @@ void setup()
   digitalWrite(4, LOW);
   
   attachInterrupt(0, doInt, RISING);
+  referencia = bmp.readAltitude(1013.25);
 }
 
 void loop()
@@ -83,6 +87,7 @@ void loop()
   Vector norm = mpu.readNormalizeGyro();
  // lee la aceleracion
   Vector rawAccel = mpu.readRawAccel();
+  Vector normAccel = mpu.readNormalizeAccel();
   //lee la actividad xd
   Activites act = mpu.readActivites();
 
@@ -92,10 +97,41 @@ void loop()
   yaw = yaw + norm.ZAxis * timeStep;
 
   // Output raw
-  mostrarData();
+  String coma = String(',');
+  String Pitch = String(pitch);
+  String Roll = String(roll);
+  String Yaw = String(yaw);
+  String Xnorm = String(normAccel.XAxis);
+  String Ynorm = String(normAccel.YAxis);
+  String Znorm = String(normAccel.ZAxis-2);
+  String Temp1 = String(mpu.readTemperature());
+  String Temp2 = String(bmp.readTemperature()); 
+  String Presion = String(bmp.readPressure());
+  String Altura = String(bmp.readAltitude(1013.25)-referencia); 
+  String Caida = String(act.isFreeFall);
+  String timer = String (millis());
+   
+   
+  /*Serial.print(" Yaw = ");
+  Serial.print(yaw);
+  Serial.print(" MPUTemp = ");
+  Serial.print(mpu.readTemperature());
+  Serial.print(" *C  ");
+  Serial.print(" BMPTemp = ");
+  Serial.print(bmp.readTemperature());
+  Serial.print(" *C  ");
+  Serial.print(" Presion = ");
+  Serial.print(bmp.readPressure());
+  Serial.print(" Pa ");
+  Serial.print(" Altura = ");
+  Serial.print(bmp.readAltitude(1013.25)-referencia);//https://keisan.casio.com/exec/system/1224579725
+  Serial.print(" m ");//no he podido cuadra la altura, pues es un adato que para este sensor depende de las condiciones climaticas
+  Serial.print(" CL = ");
   Serial.println(act.isFreeFall);// 1 si es caida libre, cero si no
+  */
+  String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+Caida+coma+timer);
+  Serial.println(datos);
   
-
   if (freefallDetected)
   {
     ledState = !ledState;
