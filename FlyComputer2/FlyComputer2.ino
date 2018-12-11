@@ -81,8 +81,8 @@ void setup()
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
 
-  //pinMode(5, OUTPUT);
-  //digitalWrite(5, LOW);
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);
   
   attachInterrupt(0, doInt, RISING);
 
