@@ -9,16 +9,15 @@ BMP280 :  https://github.com/adafruit/Adafruit_BMP280_Library by Adafruit Indust
 #include <MPU6050.h>
 #include <Adafruit_BMP280.h>
 
+
 //Variables memoria SD
 File myFile;
-int pinCS = 4; // Pin 4 on Arduino Uno 
-
+int pinCS = 4;
 
 
 //Declaramos los Sensores
 MPU6050 mpu;
 Adafruit_BMP280 bmp; 
-
 
 
 //Variables MPU6050
@@ -45,14 +44,7 @@ void setup()
 { Serial.begin(38400);
 
   //SD Card Initialization
-  pinMode(pinCS, OUTPUT);  
-  
-
-{  Serial.begin(115200);
-  
-  //SD Card Initialization
-  pinMode(pinCS, OUTPUT);  
-  
+  pinMode(pinCS, OUTPUT); 
 
   if (SD.begin()) 
   {
@@ -65,7 +57,7 @@ void setup()
 }
 
 
-  }
+  
 
   // Initialize MPU6050
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
@@ -99,13 +91,6 @@ void setup()
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     while (1);
   }
-
-  //inicio BMP280
-  if (!bmp.begin()) {  
-    Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
-    while (1);
-  }
-
 
   referencia = bmp.readAltitude(1013.25);
 }
@@ -159,19 +144,8 @@ void loop()
       digitalWrite(5, ledState);
     }
   }
-  
-
    
-  String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+timer);
-  Serial.println(datos);
-
 
   // Wait to full timeStep period
   delay(50);
-}
-
-void doInt()
-{
-  freefallBlinkCount = 0;
-  freefallDetected = true;  
 }
