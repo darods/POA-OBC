@@ -4,12 +4,22 @@ BMP280 :  https://github.com/adafruit/Adafruit_BMP280_Library by Adafruit Indust
 */
 
 #include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
 #include <MPU6050.h>
-#include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 
 
-// Timers
+//Variables memoria SD
+File myFile;
+int pinCS = 4;
+
+//Declaramos los Sensores
+MPU6050 mpu;
+Adafruit_BMP280 bmp; 
+
+
+//Variables MPU6050
 float timeStep = 0.1;
 
 // Pitch, Roll and Yaw values
@@ -21,28 +31,26 @@ float yaw = 0;
 boolean ledState = false;
 boolean freefallDetected = false;
 int freefallBlinkCount = 0;
-//algo del BMP280, creo que son direcciones de registro
-#define BMP_SCK 13
-#define BMP_MISO 12
-#define BMP_MOSI 11 
-#define BMP_CS 10
-
-//conectados de manera I2C
-MPU6050 mpu;
-Adafruit_BMP280 bmp; 
 
 
+//Variables BMP280
 float referencia;
 
 void setup() 
-{
-  Serial.begin(115200);
+{ Serial.begin(115200);
+
+  //SD Card Initialization
+  pinMode(pinCS, OUTPUT);  
   
-  //inicio BMP280
-  if (!bmp.begin()) {  
-    Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
-    while (1);
-  }
+  if (SD.begin()) 
+  {
+    Serial.println("SD card is ready to use.");
+  } else
+  {
+    Serial.println("SD card initialization failed");
+    return;
+}
+
 
   // Initialize MPU6050
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
@@ -71,13 +79,17 @@ void setup()
 
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
-  
-  //checkSettings();
 
-  pinMode(4, OUTPUT);
-  digitalWrite(4, LOW);
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);
   
   attachInterrupt(0, doInt, RISING);
+
+    //inicio BMP280
+  if (!bmp.begin()) {  
+    Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
+    while (1);
+  }
   referencia = bmp.readAltitude(1013.25);
 }
 
@@ -110,25 +122,7 @@ void loop()
   String Altura = String(bmp.readAltitude(1013.25)-referencia); 
   String Caida = String(act.isFreeFall);
   String timer = String (millis());
-   
-   
-  /*Serial.print(" Yaw = ");
-  Serial.print(yaw);
-  Serial.print(" MPUTemp = ");
-  Serial.print(mpu.readTemperature());
-  Serial.print(" *C  ");
-  Serial.print(" BMPTemp = ");
-  Serial.print(bmp.readTemperature());
-  Serial.print(" *C  ");
-  Serial.print(" Presion = ");
-  Serial.print(bmp.readPressure());
-  Serial.print(" Pa ");
-  Serial.print(" Altura = ");
-  Serial.print(bmp.readAltitude(1013.25)-referencia);//https://keisan.casio.com/exec/system/1224579725
-  Serial.print(" m ");//no he podido cuadra la altura, pues es un adato que para este sensor depende de las condiciones climaticas
-  Serial.print(" CL = ");
-  Serial.println(act.isFreeFall);// 1 si es caida libre, cero si no
-  */
+
   String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+Caida+coma+timer);
   Serial.println(datos);
   
@@ -136,7 +130,7 @@ void loop()
   {
     ledState = !ledState;
 
-    digitalWrite(4, ledState);
+    digitalWrite(5, ledState);
 
     freefallBlinkCount++;
 
@@ -144,7 +138,7 @@ void loop()
     {
       freefallDetected = false;
       ledState = false;
-      digitalWrite(4, ledState);
+      digitalWrite(5, ledState);
     }
   }
   

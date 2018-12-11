@@ -4,7 +4,7 @@ void doInt()
   freefallDetected = true;  
 }
 
-void checkSettings()
+/*void checkSettings()
 {
   Serial.println();
   
@@ -64,9 +64,4 @@ void checkSettings()
   }  
   
   Serial.println();
-}
-
-
-
-
-
+}*/
