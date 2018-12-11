@@ -11,12 +11,15 @@ BMP280 :  https://github.com/adafruit/Adafruit_BMP280_Library by Adafruit Indust
 
 //Variables memoria SD
 File myFile;
-int pinCS = 4; // Pin 4 on Arduino Uno <--------------------------------------------------
+int pinCS = 4; // Pin 4 on Arduino Uno 
+
 
 
 //Declaramos los Sensores
 MPU6050 mpu;
 Adafruit_BMP280 bmp; 
+
+
 
 //Variables MPU6050
 // Timers
@@ -32,16 +35,25 @@ boolean ledState = false;
 boolean freefallDetected = false;
 int freefallBlinkCount = 0;
 
+
 //Variables BMP280
 float referencia;
 
 
 void setup() 
+
+{ Serial.begin(38400);
+
+  //SD Card Initialization
+  pinMode(pinCS, OUTPUT);  
+  
+
 {  Serial.begin(115200);
   
   //SD Card Initialization
   pinMode(pinCS, OUTPUT);  
   
+
   if (SD.begin()) 
   {
     Serial.println("SD card is ready to use.");
@@ -49,6 +61,10 @@ void setup()
   {
     Serial.println("SD card initialization failed");
     return;
+
+}
+
+
   }
 
   // Initialize MPU6050
@@ -67,11 +83,29 @@ void setup()
   mpu.setThreshold(3);
 
   
+
+  mpu.setDHPFMode(MPU6050_DHPF_5HZ);
+
+  mpu.setFreeFallDetectionThreshold(17);
+  mpu.setFreeFallDetectionDuration(2);  
+
+  //pinMode(5, OUTPUT);
+  //digitalWrite(5, LOW);
+  
+  attachInterrupt(0, doInt, RISING);
+
+    //inicio BMP280
+  if (!bmp.begin()) {  
+    Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
+    while (1);
+  }
+
   //inicio BMP280
   if (!bmp.begin()) {  
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     while (1);
   }
+
 
   referencia = bmp.readAltitude(1013.25);
 }
@@ -102,13 +136,42 @@ void loop()
   String Temp1 = String(mpu.readTemperature());
   String Temp2 = String(bmp.readTemperature()); 
   String Presion = String(bmp.readPressure());
-  String Altura = String(bmp.readAltitude(1013.25)-referencia); 
+  String Altura = String(bmp.readAltitude(1013.25)-referencia);
+  String Caida = String(act.isFreeFall); 
   String timer = String (millis());
-   
+
+
+  String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+Caida+coma+timer);
+  Serial.println(datos);
+  
+  if (freefallDetected)
+  {
+    ledState = !ledState;
+
+    digitalWrite(5, ledState);
+
+    freefallBlinkCount++;
+
+    if (freefallBlinkCount == 20)
+    {
+      freefallDetected = false;
+      ledState = false;
+      digitalWrite(5, ledState);
+    }
+  }
+  
+
    
   String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+timer);
   Serial.println(datos);
 
+
   // Wait to full timeStep period
   delay(50);
+}
+
+void doInt()
+{
+  freefallBlinkCount = 0;
+  freefallDetected = true;  
 }
