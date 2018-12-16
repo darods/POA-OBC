@@ -41,7 +41,7 @@ float referencia;
 
 void setup() 
 
-{ Serial.begin(38400);
+{ Serial.begin(115200);
 
   //SD Card Initialization
   pinMode(pinCS, OUTPUT); 
@@ -143,6 +143,17 @@ void loop()
       ledState = false;
       digitalWrite(5, ledState);
     }
+  }
+
+   //Guarda los datos en la tarjeta SD
+  myFile = SD.open("test.txt", FILE_WRITE);
+  if (myFile) {    
+    myFile.println(datos);
+    myFile.close();
+  }
+  // if the file didn't open, print an error:
+  else {
+    Serial.println("error opening test.txt");
   }
    
 
