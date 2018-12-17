@@ -75,7 +75,7 @@ void loop()
   int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
   int roll = (atan2(normAccel.YAxis, normAccel.ZAxis)*180.0)/M_PI;
   
-  float tempMPU6050 = mpu.readTemperature();
+  //float tempMPU6050 = mpu.readTemperature();
 
   // Calcula los valores del MS5611
   // Read true temperature & Pressure
@@ -94,7 +94,7 @@ void loop()
   String Xnorm = String(normAccel.XAxis);
   String Ynorm = String(normAccel.YAxis);
   String Znorm = String(normAccel.ZAxis);
-  String Temp1 = String(tempMPU6050);
+  String Temp1 = String(mpu.readTemperature());
   String Temp2 = String(realTemperature); 
   String Presion = String(realPressure);
   String Altura = String(relativeAltitude); 
