@@ -41,7 +41,7 @@ float referencia;
 
 void setup() 
 
-{ Serial.begin(38400);
+{ Serial.begin(115200);
 
   //SD Card Initialization
   pinMode(pinCS, OUTPUT); 
@@ -128,6 +128,18 @@ void loop()
 
   String datos = String(Pitch+coma+Roll+coma+Yaw+coma+Xnorm+coma+Ynorm+coma+Znorm+coma+Temp1+coma+Temp2+coma+Presion+coma+Altura+coma+Caida+coma+timer);
   Serial.println(datos);
+
+   
+  //Guarda los datos en la tarjeta SD
+  myFile = SD.open("test.txt", FILE_WRITE);
+  if (myFile) {    
+    myFile.println(datos);
+    myFile.close();
+  }
+  // if the file didn't open, print an error:
+  else {
+    Serial.println("error opening test.txt");
+  }
   
   if (freefallDetected)
   {
