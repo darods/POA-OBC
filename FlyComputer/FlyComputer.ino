@@ -13,9 +13,11 @@ Arduino Rocket Data Logger : https://www.instructables.com/id/Arduino-Rocket-Dat
 #include <MPU6050.h>
 #include <MS5611.h>
 
+
 //Variables memoria SD
 File myFile;
 int pinCS = 4; // Pin 4 on Arduino Uno
+
 
 //Declaramos los Sensores
 MPU6050 mpu;
@@ -26,7 +28,7 @@ MS5611 ms5611;
 double referencePressure;
 
 void setup()
-{ Serial.begin(38400);
+{ Serial.begin(115200);
 
 // SD Card Initialization
   pinMode(pinCS, OUTPUT);  
