@@ -41,7 +41,7 @@ float referencia;
 
 void setup() 
 
-{ Serial.begin(115200);
+{ Serial.begin(9600);
 
   //SD Card Initialization
   pinMode(pinCS, OUTPUT); 
@@ -81,8 +81,8 @@ void setup()
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
 
-  pinMode(5, OUTPUT);
-  digitalWrite(5, LOW);
+  //pinMode(5, OUTPUT);
+  //digitalWrite(5, LOW);
   
   attachInterrupt(0, doInt, RISING);
 
@@ -141,7 +141,7 @@ void loop()
     Serial.println("error opening test.txt");
   }
   
-  if (freefallDetected)
+  /*if (freefallDetected)
   {
     ledState = !ledState;
 
@@ -155,9 +155,9 @@ void loop()
       ledState = false;
       digitalWrite(5, ledState);
     }
-  }
+  }*/
    
 
   // Wait to full timeStep period
-  delay(50);
+  delay(500);
 }
