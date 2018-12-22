@@ -86,7 +86,7 @@ void setup()
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
 
-  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
+  while(!ms5611.begin(/*MS5611_ULTRA_HIGH_RES*/))
   {
     Serial.println("Could not find a valid MS5611 sensor, check wiring!");
     delay(500);
