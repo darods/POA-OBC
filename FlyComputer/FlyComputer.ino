@@ -23,12 +23,25 @@ int pinCS = 4; // Pin 4 on Arduino Uno
 MPU6050 mpu;
 MS5611 ms5611;
 
+//Variables MPU6050
+// Timers
+float timeStep = 0.1;
 
-//Varaibles MS5611
+// Pitch, Roll and Yaw values
+float pitch = 0;
+float roll = 0;
+float yaw = 0;
+
+//variables caida libre
+boolean ledState = false;
+boolean freefallDetected = false;
+int freefallBlinkCount = 0;
+
+//Variables MS5611
 double referencePressure;
 
 void setup()
-{ Serial.begin(115200);
+{ Serial.begin(9600);
 
 // SD Card Initialization
   pinMode(pinCS, OUTPUT);  
@@ -48,8 +61,26 @@ void setup()
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
-  //calibrando gyro
+
+  
+  // Calibrate gyroscope. The calibration must be at rest.
   mpu.calibrateGyro();
+
+  // Set threshold sensivty. Default 3.
+  // If you don't want use threshold, comment this line or set 0.
+  mpu.setThreshold(3);
+
+  
+
+  mpu.setDHPFMode(MPU6050_DHPF_5HZ);
+
+  mpu.setFreeFallDetectionThreshold(17);
+  mpu.setFreeFallDetectionDuration(2);  
+
+  //pinMode(5, OUTPUT);
+  //digitalWrite(5, LOW);
+  
+  attachInterrupt(0, doInt, RISING);
 
   
   // Initialize MS5611 sensor
@@ -77,15 +108,13 @@ void loop()
   int pitch = -(atan2(normAccel.XAxis, sqrt(normAccel.YAxis*normAccel.YAxis + normAccel.ZAxis*normAccel.ZAxis))*180.0)/M_PI;
   int roll = (atan2(normAccel.YAxis, normAccel.ZAxis)*180.0)/M_PI;
   
-  //float tempMPU6050 = mpu.readTemperature();
-
   // Calcula los valores del MS5611
   // Read true temperature & Pressure
   double realTemperature = ms5611.readTemperature(true);
   long realPressure = ms5611.readPressure(true);
 
   // Calculate altitude
-  float absoluteAltitude = ms5611.getAltitude(realPressure);
+  //float absoluteAltitude = ms5611.getAltitude(realPressure);
   float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
   if(relativeAltitude < -2){relativeAltitude = 0;}
  
@@ -117,5 +146,5 @@ void loop()
   }
 
   // Wait to full timeStep period
-  delay(50);
+  delay(500);
 }
