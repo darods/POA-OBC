@@ -7,7 +7,7 @@ Codigos de referencia :
 Arduino Rocket Data Logger : https://www.instructables.com/id/Arduino-Rocket-Data-Logger/
 */
 
-#include <Wire.h>
+//#include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
 #include <MPU6050.h>
@@ -23,7 +23,7 @@ int pinCS = 4; // Pin 4 on Arduino Uno
 MPU6050 mpu;
 MS5611 ms5611;
 
-//Variables MPU6050
+/*Variables MPU6050
 // Timers
 float timeStep = 0.1;
 
@@ -35,7 +35,7 @@ float yaw = 0;
 //variables caida libre
 boolean ledState = false;
 boolean freefallDetected = false;
-int freefallBlinkCount = 0;
+int freefallBlinkCount = 0;*/
 
 //Variables MS5611
 double referencePressure;
@@ -72,7 +72,7 @@ void setup()
 
   
 
-  mpu.setDHPFMode(MPU6050_DHPF_5HZ);
+  /*mpu.setDHPFMode(MPU6050_DHPF_5HZ);
 
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2);  
@@ -81,12 +81,12 @@ void setup()
   //digitalWrite(5, LOW);
   
   attachInterrupt(0, doInt, RISING);
-
+*/
   
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
 
-  while(!ms5611.begin(/*MS5611_ULTRA_HIGH_RES*/))
+  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
   {
     Serial.println("Could not find a valid MS5611 sensor, check wiring!");
     delay(500);

@@ -20,12 +20,15 @@ the software.
 */
 
 #include <Wire.h>
+//#include <math.h>
 
 long accelX, accelY, accelZ;
 float gForceX, gForceY, gForceZ;
 
 long gyroX, gyroY, gyroZ;
 float rotX, rotY, rotZ;
+
+//float pitch ,roll, yaw;
 
 void setup() {
   Serial.begin(9600);
@@ -55,10 +58,18 @@ void recordAccelRegisters() {
 }
 
 void processAccelData(){
-  gForceX = accelX / 2048.0;
-  gForceY = accelY / 2048.0; 
-  gForceZ = accelZ / 2048.0;
+  gForceX = (accelX*9.8)/ 2048.0;
+  gForceY = (accelY*9.8)/ 2048.0; 
+  gForceZ = (accelZ*9.8)/ 2048.0;
+  
+  
+  /*pitch = 180 * atan(gForceX/sqrt(gForceY*gForceY + gForceZ*gForceZ))/PI;
+  roll = 180 * atan(gForceY/sqrt(gForceX*gForceX + gForceZ*gForceZ))/PI;
+  yaw = 180 * atan(gForceZ/sqrt(gForceY*gForceY + gForceZ*gForceZ))/PI;
+  */
 }
+
+
 
 void recordGyroRegisters() {
   Wire.beginTransmission(0b1101000); //I2C address of the MPU
@@ -78,6 +89,7 @@ void processGyroData() {
   rotZ = gyroZ / 131.0;
 }
 
+
 void printData() {
   Serial.print("Gyro (deg)");
   Serial.print(" X=");
@@ -86,11 +98,19 @@ void printData() {
   Serial.print(rotY);
   Serial.print(" Z=");
   Serial.print(rotZ);
-  Serial.print(" Accel (g)");
+  Serial.print(" Accel (m/s)");
   Serial.print(" X=");
   Serial.print(gForceX);
   Serial.print(" Y=");
   Serial.print(gForceY);
   Serial.print(" Z=");
-  Serial.println(gForceZ);
+  Serial.print(gForceZ);
+  /*
+  Serial.print (" pitch = ");
+  Serial.print(pitch);
+  Serial.print (" roll = ");
+  Serial.print(roll);
+  Serial.print (" yaw = ");
+  Serial.println(yaw);
+  */
 }

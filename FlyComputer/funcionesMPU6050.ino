@@ -1,8 +1,8 @@
-void doInt()
+/*void doInt()
 {
   freefallBlinkCount = 0;
   freefallDetected = true;  
-}
+}*/
 
 /*void checkSettings()
 {
