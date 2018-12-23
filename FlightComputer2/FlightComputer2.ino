@@ -1,4 +1,4 @@
-/*
+ /*
 MPU6050 : https://github.com/jarzebski/Arduino-MPU6050 by Korneliusz Jarzebski
 BMP280 :  https://github.com/adafruit/Adafruit_BMP280_Library by Adafruit Industries
 */
