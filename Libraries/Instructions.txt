@@ -1,0 +1,1 @@
+You have to put this libraries in your "libraries" folder in the Arduino folder.
