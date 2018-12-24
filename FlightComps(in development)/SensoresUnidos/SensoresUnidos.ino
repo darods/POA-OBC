@@ -36,8 +36,8 @@ MS5611 ms5611;
 
 void setup() 
 {
-  Serial.begin(38400);
-  
+  Serial.begin(9600);
+  Wire.begin();
   // Initialize MS5611
   while(!ms5611.begin())
   {
@@ -126,7 +126,5 @@ void loop()
   
 
   // Wait to full timeStep period
-  delay(50);
+  delay(500);
 }
-
-
