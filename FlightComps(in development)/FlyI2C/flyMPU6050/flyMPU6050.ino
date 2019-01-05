@@ -21,7 +21,17 @@ the software.
 
 #include <Wire.h>
 //#include <math.h>
+#include <SPI.h>
+#include <SD.h>
+#include <MS5611.h>
 
+
+//Variables SD micro memory
+File myFile;
+int pinCS = 4; // Pin 4 on Arduino Uno
+String data;
+
+//Variables for MPU6050
 long accelX, accelY, accelZ;
 float gForceX, gForceY, gForceZ;
 
@@ -30,68 +40,77 @@ float rotX, rotY, rotZ;
 
 //float pitch ,roll, yaw;
 
+//Variables for MS5611
+MS5611 ms5611;
+double referencePressure;
+double realTemperature;
+long realPressure;
+float relativeAltitude;
+
 void setup() {
   Serial.begin(9600);
   Wire.begin();
+
+  /*if (SD.begin()) 
+  {
+    Serial.println("SD card is ready to use.");
+  } else
+  {
+    Serial.println("SD card initialization failed");
+    return;
+  }
+*/
+  pinMode(pinCS, OUTPUT);  
+  
+  if (SD.begin()) 
+  {
+    Serial.println("SD card is ready to use.");
+  } else
+  {
+    Serial.println("SD card initialization failed");
+    return;
+  }
+  
   setupMPU();
+    // Initialize MS5611 sensor
+  Serial.println("Initialize MS5611 Sensor");
+
+  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
+  {
+    Serial.println("Could not find a valid MS5611 sensor, check wiring!");
+    delay(500);
+  }
+  referencePressure = ms5611.readPressure();
+  // Check settings
+  checkSettings();
 }
 
 
 void loop() {
   recordAccelRegisters();
   recordGyroRegisters();
-  printData();
+  RecordMS5611();
+  
+  String coma = String(',');
+  //String data = String(rotX+coma+rotY+coma+rotZ+coma+gForceX+coma+gForceY+coma+gForceZ+coma+realTemperature+coma+realPressure+coma+relativeAltitude);
+  Serial.println(data);
+
+  //Save files in the micro SD card
+  myFile = SD.open("flight.txt",FILE_WRITE);
+  if(myFile){
+      myFile.println(data);
+      myFile.close();
+    }
+    //error file did not open
+    Serial.println("error trying to open flight.txt");
   delay(100);
 }
 
-
-void recordAccelRegisters() {
-  Wire.beginTransmission(0x68); //I2C address of the MPU
-  Wire.write(0x3B); //Starting register for Accel Readings
-  Wire.endTransmission();
-  Wire.requestFrom(0b1101000,6); //Request Accel Registers (3B - 40)
-  while(Wire.available() < 6);
-  accelX = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  accelY = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  accelZ = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
-  processAccelData();
-}
-
-void processAccelData(){
-  gForceX = (accelX*9.8)/ 2048.0;
-  gForceY = (accelY*9.8)/ 2048.0; 
-  gForceZ = (accelZ*9.8)/ 2048.0;
-  
-  
-  /*pitch = 180 * atan(gForceX/sqrt(gForceY*gForceY + gForceZ*gForceZ))/PI;
-  roll = 180 * atan(gForceY/sqrt(gForceX*gForceX + gForceZ*gForceZ))/PI;
-  yaw = 180 * atan(gForceZ/sqrt(gForceY*gForceY + gForceZ*gForceZ))/PI;
-  */
-}
-
-
-
-void recordGyroRegisters() {
-  Wire.beginTransmission(0b1101000); //I2C address of the MPU
-  Wire.write(0x43); //Starting register for Gyro Readings
-  Wire.endTransmission();
-  Wire.requestFrom(0b1101000,6); //Request Gyro Registers (43 - 48)
-  while(Wire.available() < 6);
-  gyroX = Wire.read()<<8|Wire.read(); //Store first two bytes into accelX
-  gyroY = Wire.read()<<8|Wire.read(); //Store middle two bytes into accelY
-  gyroZ = Wire.read()<<8|Wire.read(); //Store last two bytes into accelZ
-  processGyroData();
-}
-
-void processGyroData() {
-  rotX = gyroX / 131.0;
-  rotY = gyroY / 131.0; 
-  rotZ = gyroZ / 131.0;
-}
-
-
+/*
 void printData() {
-  Serial.print("Gyro (deg)");
+  String coma = String(',');
+  data = (rotX+coma+rotY+coma+rotZ+coma+gForceX+coma+gForceY+coma+gForceZ+coma+realTemperature+coma+realPressure+coma+relativeAltitude);
+  /*Serial.print("Gyro (deg)");
   Serial.print(" X=");
   Serial.print(rotX);
   Serial.print(" Y=");
@@ -105,6 +124,8 @@ void printData() {
   Serial.print(gForceY);
   Serial.print(" Z=");
   Serial.print(gForceZ);
+  Serial.print(" Altura = ");
+  Serial.println(relativeAltitude);
   /*
   Serial.print (" pitch = ");
   Serial.print(pitch);
@@ -112,5 +133,7 @@ void printData() {
   Serial.print(roll);
   Serial.print (" yaw = ");
   Serial.println(yaw);
-  */
-}
+  
+  
+  Serial.println(data);
+}*/
