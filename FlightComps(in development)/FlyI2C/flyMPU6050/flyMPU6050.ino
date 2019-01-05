@@ -29,7 +29,7 @@ the software.
 //Variables SD micro memory
 File myFile;
 int pinCS = 4; // Pin 4 on Arduino Uno
-String data;
+//String data;
 
 //Variables for MPU6050
 long accelX, accelY, accelZ;
@@ -92,17 +92,17 @@ void loop() {
   RecordMS5611();
   
   String coma = String(',');
-  //String data = String(rotX+coma+rotY+coma+rotZ+coma+gForceX+coma+gForceY+coma+gForceZ+coma+realTemperature+coma+realPressure+coma+relativeAltitude);
+  String data = String(rotX+coma+rotY+coma+rotZ+coma+gForceX+coma+gForceY+coma+gForceZ+coma+realTemperature+coma+realPressure+coma+relativeAltitude);
   Serial.println(data);
 
-  //Save files in the micro SD card
+  /*Save files in the micro SD card
   myFile = SD.open("flight.txt",FILE_WRITE);
   if(myFile){
       myFile.println(data);
       myFile.close();
     }
     //error file did not open
-    Serial.println("error trying to open flight.txt");
+    Serial.println("error trying to open flight.txt");*/
   delay(100);
 }
 
