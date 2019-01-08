@@ -5,6 +5,8 @@ Version: 1.0.3
 (c) 2014-2015 Korneliusz Jarzebski
 www.jarzebski.pl
 
+Modified by el-NASA (Daniel Alejandro Rodriguez) 2019 
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the version 3 GNU General Public License as
 published by the Free Software Foundation.
@@ -49,7 +51,7 @@ bool MPU6050::begin(mpu6050_dps_t scale, mpu6050_range_t range, int mpua)
     actualThreshold = 0;
 
     // Check MPU6050 Who Am I Register
-    if (fastRegister8(MPU6050_REG_WHO_AM_I) != 0x68)
+    if (readRegister8(MPU6050_REG_WHO_AM_I) != 0x68)
     {
 	return false;
     }
@@ -612,31 +614,8 @@ void MPU6050::setThreshold(uint8_t multiple)
     // Remember old threshold value
     actualThreshold = multiple;
 }
-
-// Fast read 8-bit from register
-uint8_t MPU6050::fastRegister8(uint8_t reg)
-{
-    uint8_t value;
-
-    Wire.beginTransmission(mpuAddress);
-    #if ARDUINO >= 100
-	Wire.write(reg);
-    #else
-	Wire.send(reg);
-    #endif
-    Wire.endTransmission();
-
-    //Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 1);
-    #if ARDUINO >= 100
-	value = Wire.read();
-    #else
-	value = Wire.receive();
-    #endif;
-    //Wire.endTransmission();
-
-    return value;
-}
+ //There preveiw code has the function "fastRegister8", but it has the same code as "readRegister8", making it unnecesary
+//This correction was possible thanks to an issue posted by koepel in my project POA 
 
 // Read 8-bit from register
 uint8_t MPU6050::readRegister8(uint8_t reg)

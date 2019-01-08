@@ -48,17 +48,17 @@ void setup()
   
   if (SD.begin()) 
   {
-    Serial.println("SD card is ready to use.");
+    Serial.println(F("SD card is ready to use."));
   } else
   {
-    Serial.println("SD card initialization failed");
+    Serial.println(F("SD card initialization failed"));
     return;
   }
   
   // Initialize MPU6050
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
-    Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
+    Serial.println(F("Could not find a valid MPU6050 sensor, check wiring!"));
     delay(500);
   }
 
@@ -84,11 +84,11 @@ void setup()
 */
   
   // Initialize MS5611 sensor
-  Serial.println("Initialize MS5611 Sensor");
+  Serial.println(F("Initialize MS5611 Sensor"));
 
   while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
   {
-    Serial.println("Could not find a valid MS5611 sensor, check wiring!");
+    Serial.println(F("Could not find a valid MS5611 sensor, check wiring!"));
     delay(500);
   }
 
@@ -115,8 +115,8 @@ void loop()
 
   // Calculate altitude
   //float absoluteAltitude = ms5611.getAltitude(realPressure);
-  float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
-  if(relativeAltitude < -2){relativeAltitude = 0;}
+  float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure)/10;
+  //if(relativeAltitude < -2){relativeAltitude = 0;}
  
  //Pone todos los valores como una cadena
   String coma = String(',');
