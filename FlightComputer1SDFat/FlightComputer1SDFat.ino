@@ -4,7 +4,9 @@
 #include <SPI.h>
 #include "SdFat.h"
 #include <MS5611.h>
+#include <MPU6050.h>
 
+MPU6050 mpu;
 MS5611 ms5611;
 //Variables MS5611
 double referencePressure;
@@ -35,21 +37,9 @@ uint32_t logTime;
 
 const uint8_t ANALOG_COUNT = 4;
 //------------------------------------------------------------------------------
-// Write data header.
-void writeHeader() {
-  file.print(F("micros"));
-  Serial.print(F("micros"));
-  for (uint8_t i = 0; i < ANALOG_COUNT; i++) {
-    file.print(F(",adc"));
-    Serial.print(F(",adc"));
-    file.print(i, DEC);
-    Serial.print(i, DEC);
-  }
-  file.println();
-  Serial.println();
-}
+//WriteHeader function used to be here
 //------------------------------------------------------------------------------
-
+//logData function used to be here
 //==============================================================================
 // Error messages stored in flash.
 #define error(msg) sd.errorHalt(F(msg))
@@ -59,6 +49,23 @@ void setup() {
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
   Serial.begin(9600);
+  // Initialize MPU6050
+  while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
+  {
+    Serial.println(F("Could not find a valid MPU6050 sensor, check wiring!"));
+    delay(500);
+  }
+
+  
+  // Calibrate gyroscope. The calibration must be at rest.
+  mpu.calibrateGyro();
+
+  // Set threshold sensivty. Default 3.
+  // If you don't want use threshold, comment this line or set 0.
+  mpu.setThreshold(3);
+
+  
+
   
   // Wait for USB Serial 
   while (!Serial) {
