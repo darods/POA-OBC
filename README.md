@@ -11,6 +11,8 @@ In this repo you will find:
 
 ### Libraries
 For running this project, you will have to some libraries for arduino : 
-*[MPU6050] (https://github.com/jarzebski/Arduino-MPU6050)
-
+* [SdFat](https://github.com/greiman/SdFat) - by Bill Greiman
+* [MPU6050] (https://github.com/jarzebski/Arduino-MPU6050) - by Korneliusz Jarzebski
+* [MS5611](https://github.com/jarzebski/Arduino-MS5611) - by Korneliusz Jarzebski
+* []()
 I hope that the information in this repository is a good starting point for your science and technology enthusiasts, so if you want to help us develop this, feel free to do so, we will be very happy.
