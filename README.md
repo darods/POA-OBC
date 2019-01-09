@@ -1,5 +1,6 @@
 POA
-Pillar of Autumn
+
+(Pillar of Autumn)
 ===
 
 Hello, the purpose of this project is to give the knowledge and open source code on how to build a flight computer for an amateur space science project.
