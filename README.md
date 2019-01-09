@@ -1,9 +1,9 @@
-Pillar of Autumn (POA)
-===
+# POA
+## Pillar of Autumn 
 
 Hello, the purpose of this project is to give the knowledge and open source code on how to build a flight computer for an amateur model rocket project.
 
-Our goal is to provide practical knowledge of fresh space for everyone.
+**Our goal is to provide practical knowledge of rocket science everyone.**
 
 In this repo you will find:
 * Source code of cheap arduino flight computers.
