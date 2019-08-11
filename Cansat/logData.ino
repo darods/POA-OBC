@@ -22,10 +22,10 @@ void logData() {
 
 
   //Writing the data
-  //Serial.print(logTime);
+  Serial.print(logTime);
   //file.print(logTime);
   //file.print(F(","));
-  //Serial.print(F(","));
+  Serial.print(F(","));
   
   /*
   file.print(relativeAltitude);
