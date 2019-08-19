@@ -217,4 +217,5 @@ void loop() {
     Serial.println(F("Done"));
     SysCall::halt();
   }*/
+  delay(500);
 }
