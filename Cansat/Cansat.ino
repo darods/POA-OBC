@@ -201,4 +201,5 @@ void loop() {
   delay(SAMPLE_INTERVAL_MS);
    // Time for next record.
   logTime += SAMPLE_INTERVAL_MS ;
+
 }
