@@ -88,7 +88,7 @@ void setup() {
 
   
   // Initializing MPU6050 according to MPU6050_free_fall example
-  Serial.println(F("Initialize MPU6050 Sensor"));
+  //Serial.println(F("Initialize MPU6050 Sensor"));
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
@@ -107,7 +107,7 @@ void setup() {
   attachInterrupt(0, doInt, RISING); 
 
   //Initialize MS5611 sensor
-  Serial.println(F("Initialize BMP280 Sensor"));   
+  //Serial.println(F("Initialize BMP280 Sensor"));   
   if (!bmp.begin()) {  
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     while (1);
