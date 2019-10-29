@@ -20,6 +20,7 @@
 #include <MPU6050.h>//Library for the  6 axis accelerometer and gyro
 #include <MS5611.h>//For the Barometer
 
+const int buzzer = 5;
 //Declaring the Sensors
 MPU6050 mpu;
 MS5611 ms5611;
@@ -77,6 +78,7 @@ const uint8_t ANALOG_COUNT = 4;
 #define error(msg) sd.errorHalt(F(msg))
 //------------------------------------------------------------------------------
 void setup() {
+  pinMode(buzzer, OUTPUT);
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
@@ -88,7 +90,8 @@ void setup() {
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
-    delay(500);
+    tone(buzzer, 3000, 500);
+    delay(1000);
   }  
   // Calibrate gyroscope. The calibration must be at rest.
   mpu.calibrateGyro();
