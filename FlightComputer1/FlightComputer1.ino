@@ -20,6 +20,7 @@
 #include <MPU6050.h>//Library for the  6 axis accelerometer and gyro
 #include <MS5611.h>//For the Barometer
 
+const int buzzer = 5;
 //Declaring the Sensors
 MPU6050 mpu;
 MS5611 ms5611;
@@ -77,6 +78,7 @@ const uint8_t ANALOG_COUNT = 4;
 #define error(msg) sd.errorHalt(F(msg))
 //------------------------------------------------------------------------------
 void setup() {
+  pinMode(buzzer, OUTPUT);
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
@@ -84,12 +86,10 @@ void setup() {
 
   
   // Initializing MPU6050 according to MPU6050_free_fall example
-  Serial.println(F("Initialize MPU6050 Sensor"));
+  file.println(F("Initialize MPU6050 Sensor"));
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
-  {
-    Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
-    delay(500);
-  }  
+    verificacion(buzzer);
+  alertaInicio(buzzer);
   // Calibrate gyroscope. The calibration must be at rest.
   mpu.calibrateGyro();
 
@@ -103,30 +103,17 @@ void setup() {
   attachInterrupt(0, doInt, RISING); 
   
   // Initialize MS5611 sensor
-  Serial.println(F("Initialize MS5611 Sensor"));
-
+  file.println(F("Initialize MS5611 Sensor")); 
   while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
-  {
-    Serial.println(F("Could not find a valid MS5611 sensor, check wiring!"));
-    delay(500);
-  }
+    verificacion(buzzer);
+  alertaInicio(buzzer);
   // Get reference pressure for relative altitude
   referencePressure = ms5611.readPressure();
 
   // Check settings
   checkSettings();
   
-  // Wait for USB Serial 
-  while (!Serial) {
-    SysCall::yield();
-  }
-  delay(1000);
- /*
-  Serial.println(F("Type any character to start"));
-  while (!Serial.available()) {
-    SysCall::yield();
-  }*/
-  
+
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
   if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
@@ -157,7 +144,6 @@ void setup() {
 
   Serial.print(F("Logging to: "));
   Serial.println(fileName);
-  Serial.println(F("TYPE ANY CHARACTER TO STOP"));
 
   // Write data header.
   writeHeader();
@@ -165,7 +151,7 @@ void setup() {
   // Start on a multiple of the sample interval.
   logTime = micros()/(1000UL*SAMPLE_INTERVAL_MS) + 1;
   logTime *= 1000UL*SAMPLE_INTERVAL_MS;
-
+  alertaInicio(buzzer);
 }
 
 
@@ -192,10 +178,4 @@ void loop() {
     error("write error");
   }
 
-  if (Serial.available()) {
-    // Close file and stop.
-    file.close();
-    Serial.println(F("Done"));
-    SysCall::halt();
-  }
 }

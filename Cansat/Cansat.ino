@@ -14,7 +14,6 @@
 */
 
  //Declaring libraries
-//#include <SPI.h>Is used for the micro SD, but if you comment this line there is no problem 
 //because SdFat already have an implementation of SPI in their files
 //#include "SdFat.h"//It is a better version of the SD library that comes with arduino IDE, requires less memory overall and can do more cool stuff
 #include <MPU6050.h>//Library for the  6 axis accelerometer and gyro
@@ -67,7 +66,7 @@ const uint32_t SAMPLE_INTERVAL_MS = 500;
 //SdFile file;
 
 // Time in micros for next data record.
-//uint32_t logTime;
+uint32_t logTime = 0;
 
 //==============================================================================
 // User functions.  Edit writeHeader() and logData() for your requirements.
@@ -89,7 +88,7 @@ void setup() {
 
   
   // Initializing MPU6050 according to MPU6050_free_fall example
-  Serial.println(F("Initialize MPU6050 Sensor"));
+  //Serial.println(F("Initialize MPU6050 Sensor"));
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
@@ -107,23 +106,8 @@ void setup() {
   mpu.setFreeFallDetectionDuration(2); 
   attachInterrupt(0, doInt, RISING); 
 
-  /*
-  // Initialize MS5611 sensor
-  Serial.println(F("Initialize MS5611 Sensor"));
-
-  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
-  {
-    Serial.println(F("Could not find a valid MS5611 sensor, check wiring!"));
-    delay(500);
-  }
-  // Get reference pressure for relative altitude
-  referencePressure = ms5611.readPressure();
-
-  // Check settings
-  checkSettings();
-  */
   //Initialize MS5611 sensor
-  Serial.println(F("Initialize BMP280 Sensor"));   
+  //Serial.println(F("Initialize BMP280 Sensor"));   
   if (!bmp.begin()) {  
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
     while (1);
@@ -189,9 +173,6 @@ void setup() {
 
 //------------------------------------------------------------------------------
 void loop() {
-  // Time for next record.
-  //logTime += 1000UL*SAMPLE_INTERVAL_MS;
-
   // Wait for log time.
   //int32_t diff;
   /*
@@ -217,5 +198,8 @@ void loop() {
     Serial.println(F("Done"));
     SysCall::halt();
   }*/
-  delay(500);
+  delay(SAMPLE_INTERVAL_MS);
+   // Time for next record.
+  logTime += SAMPLE_INTERVAL_MS ;
+
 }

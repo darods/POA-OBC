@@ -22,50 +22,26 @@ void logData() {
 
 
   //Writing the data
-  Serial.print(logTime);
   file.print(logTime);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(relativeAltitude);
-  Serial.print(relativeAltitude);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(act.isFreeFall);
-  Serial.print(act.isFreeFall);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(realTemperature);
-  Serial.print(realTemperature);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(realPressure);
-  Serial.print(realPressure);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(pitch);
-  Serial.print(pitch);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(roll);
-  Serial.print(roll);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(yaw);
-  Serial.print(yaw);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(normAccel.XAxis);
-  Serial.print(normAccel.XAxis);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(normAccel.YAxis);
-  Serial.print(normAccel.YAxis);
   file.print(F(","));
-  Serial.print(F(","));
   file.print(normAccel.ZAxis);
-  Serial.print(normAccel.ZAxis);
-
-  
   file.println();
-  Serial.println();
 }
