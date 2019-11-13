@@ -80,6 +80,8 @@ const uint8_t ANALOG_COUNT = 4;
 #define error(msg) sd.errorHalt(F(msg))
 //------------------------------------------------------------------------------
 void setup() {
+  myservo.attach(3);
+  myservo.write(0);
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
@@ -156,6 +158,7 @@ void setup() {
 
 //------------------------------------------------------------------------------
 void loop() {
+  
   // Time for next record.
   logTime += 1000UL*SAMPLE_INTERVAL_MS;
 
