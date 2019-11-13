@@ -18,11 +18,12 @@
 #include <MPU6050.h>//Library for the  6 axis accelerometer and gyro
 #include <Adafruit_BMP280.h>
 
+#include <Servo.h>
 const int buzzer = 5;
 //Declaring the Sensors
 MPU6050 mpu;
 Adafruit_BMP280 bmp;
-
+Servo myservo;
 //MPU6050 variables
 float timeStep = 0.1;//It is used for calculating pitch, roll and yaw, you can find the original example
 //in the MPU6050 examples (MPU6050_gyro_pitch_roll_yaw)
