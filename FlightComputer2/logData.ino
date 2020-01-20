@@ -34,4 +34,7 @@ void logData() {//The original function can be found in SdFat datalogger example
   file.print(F(","));
   file.print(normAccel.ZAxis); 
   file.println();
+
+  if(act.isFreeFall)
+    myservo.write(180);
 }
