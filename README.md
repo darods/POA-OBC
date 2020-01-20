@@ -1,13 +1,16 @@
-# Pillar of Autumn (POA)
+# Pillar of Autumn OBC
 
-Hello, the purpose of this project is to give the knowledge and open source code on how to build a flight computer for an amateur model rocket project.
+Hello, the purpose of this project is to give the knowledge and open source code on how to build a flight computer (On Board Computer (OBC)) for an amateur model rocket research project.
 
-**Our goal is to provide practical knowledge of rocket to science everyone.**
+![OBC2](Images/OBC2.jpg)
+*the name of the rocket is pillar of autumn, in honor of the coolest spaceship of halo reach*
+
+
 
 In this repo you will find:
-* Source code of cheap arduino flight computers.
+* Source code of cheap arduino on board computers.
 * schematic on how to build it.
-* the documentation in the code for a better understanding of the reader (diagrams and other things)
+* the necessary documentation of the code
 * References and Bibliography on the sources we used for building this project
 
 ### Libraries
@@ -15,10 +18,20 @@ For running this project, you will have to download some libraries for arduino :
 * [SdFat](https://github.com/greiman/SdFat) - by Bill Greiman
 * [MS5611](https://github.com/jarzebski/Arduino-MS5611) - by Korneliusz Jarzebski
 * [MPU6050](https://github.com/jarzebski/Arduino-MPU6050) - by Korneliusz Jarzebski
+* [BMP280](https://github.com/adafruit/Adafruit_BMP280_Library) - by Adafruit (if you use a chinese version you should change the I2C address from 0x77 to 0x76)
 
-You also have the necessary libraries in this repo with some improvements.
+I've  improved the necessary libraries, you'll find it in this repo in `Libraries` folder.
 
-I hope that the information in this repository is a good starting point for your science and technology projects, so if you want to help us develop this, feel free to do so, we will be very happy.
+### Schematics
+The **OBC1** use the GY86 Sensor, a micro SD module and the HC-06 BT module
+
+![imagen esquematico obc1]()
+
+The **OBC2** is *cheaper*, but the pourpose is *only to register data*, as a replacement for the BT it has a buzzer with alerts. It also has some other funcionalities like activate a servo motor when it dectects free fall.
+
+![imagen esquematico obc2]()
+
+I hope that the information in this repository is a good starting point for your science and technology projects, so if you want to help us developing this, feel free to do so, we will be very happy.
 
 
 ### References
