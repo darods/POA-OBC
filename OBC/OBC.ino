@@ -14,17 +14,16 @@
 */
 
  //Declaring libraries
-//#include <SPI.h>Is used for the micro SD, but if you comment this line there is no problem 
-//because SdFat already have an implementation of SPI in their files
 #include "SdFat.h"//It is a better version of the SD library that comes with arduino IDE, requires less memory overall and can do more cool stuff
 #include <MPU6050.h>//Library for the  6 axis accelerometer and gyro
-#include <MS5611.h>//For the Barometer
+#include <Adafruit_BMP280.h>
 
+#include <Servo.h>
 const int buzzer = 5;
 //Declaring the Sensors
 MPU6050 mpu;
-MS5611 ms5611;
-
+Adafruit_BMP280 bmp;
+Servo myservo;
 //MPU6050 variables
 float timeStep = 0.1;//It is used for calculating pitch, roll and yaw, you can find the original example
 //in the MPU6050 examples (MPU6050_gyro_pitch_roll_yaw)
@@ -41,6 +40,9 @@ int freefallBlinkCount = 0;
 
 //MS5611 Variables
 double referencePressure;// It is used for calculating the reference alitude
+
+//Variables BMP280
+float referencia;
 
 //SD fat configuration given by the SDFat datalogger example, modify it for  your porpose
 //For making your data logger go to the WriteHeader and logData tabs
@@ -78,7 +80,8 @@ const uint8_t ANALOG_COUNT = 4;
 #define error(msg) sd.errorHalt(F(msg))
 //------------------------------------------------------------------------------
 void setup() {
-  pinMode(buzzer, OUTPUT);
+  myservo.attach(3);
+  myservo.write(0);
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   char fileName[13] = FILE_BASE_NAME "00.csv";
 
@@ -101,19 +104,17 @@ void setup() {
   mpu.setFreeFallDetectionThreshold(17);
   mpu.setFreeFallDetectionDuration(2); 
   attachInterrupt(0, doInt, RISING); 
-  
-  // Initialize MS5611 sensor
-  file.println(F("Initialize MS5611 Sensor")); 
-  while(!ms5611.begin(MS5611_ULTRA_HIGH_RES))
+
+  //Initialize BMP280 sensor
+  file.println(F("Initialize BMP280 Sensor"));   
+  if (!bmp.begin())
     verificacion(buzzer);
   alertaInicio(buzzer);
   // Get reference pressure for relative altitude
-  referencePressure = ms5611.readPressure();
-
-  // Check settings
-  checkSettings();
+  referencia = bmp.readAltitude(1013.25);
   
 
+  
   // Initialize at the highest speed supported by the board that is
   // not over 50 MHz. Try a lower speed if SPI errors occur.
   if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
@@ -157,6 +158,7 @@ void setup() {
 
 //------------------------------------------------------------------------------
 void loop() {
+  
   // Time for next record.
   logTime += 1000UL*SAMPLE_INTERVAL_MS;
 

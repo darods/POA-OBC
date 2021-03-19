@@ -1,17 +1,7 @@
 // Log a data record.
-void logData() {
-  //The original function can be found in SdFat datalogger example
-   
-  // Read the MS5611 values, true temperature & Pressure
-  double realTemperature = ms5611.readTemperature(true);
-  long realPressure = ms5611.readPressure(true);
-  
-  // Calculate altitude
-  float relativeAltitude = ms5611.getAltitude(realPressure, referencePressure)/10;
-  //if(relativeAltitude < -2){relativeAltitude = 0;}
+void logData() {//The original function can be found in SdFat datalogger example
 
   // Getting MPU6050 values
-  
   // Read normalized values gyro
   Vector norm = mpu.readNormalizeGyro();
   Vector normAccel = mpu.readNormalizeAccel();
@@ -24,13 +14,13 @@ void logData() {
   //Writing the data
   file.print(logTime);
   file.print(F(","));
-  file.print(relativeAltitude);
+  file.print(bmp.readAltitude(1013.25)-referencia);
   file.print(F(","));
   file.print(act.isFreeFall);
   file.print(F(","));
-  file.print(realTemperature);
+  file.print(bmp.readTemperature());
   file.print(F(","));
-  file.print(realPressure);
+  file.print(bmp.readPressure());
   file.print(F(","));
   file.print(pitch);
   file.print(F(","));
@@ -42,6 +32,9 @@ void logData() {
   file.print(F(","));
   file.print(normAccel.YAxis);
   file.print(F(","));
-  file.print(normAccel.ZAxis);
+  file.print(normAccel.ZAxis); 
   file.println();
+
+  if(act.isFreeFall)
+    myservo.write(180);
 }
