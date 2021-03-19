@@ -5771,12 +5771,12 @@ W = angled&lt;p&gt;
 </classes>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="LETTER_L" device=""/>
-<part name="U1" library="gy-521" deviceset="GY-521" device="MPU6050"/>
-<part name="SG1" library="buzzer" library_urn="urn:adsk.eagle:library:113" deviceset="F/CM12P" device="" package3d_urn="urn:adsk.eagle:package:5265/1"/>
-<part name="AK500/2" library="con-ptr500" library_urn="urn:adsk.eagle:library:181" deviceset="AK500/2" device="" package3d_urn="urn:adsk.eagle:package:9880/1"/>
+<part name="U1" library="gy-521" deviceset="GY-521" device="MPU6050" override_package3d_urn="urn:adsk.eagle:package:27578946/2" override_package_urn="urn:adsk.eagle:footprint:27578950/1"/>
+<part name="SG1" library="buzzer" library_urn="urn:adsk.eagle:library:113" deviceset="F/CM12P" device="" package3d_urn="urn:adsk.eagle:package:5265/1" override_package3d_urn="urn:adsk.eagle:package:27579015/2" override_package_urn="urn:adsk.eagle:footprint:5223/1"/>
+<part name="AK500/2" library="con-ptr500" library_urn="urn:adsk.eagle:library:181" deviceset="AK500/2" device="" package3d_urn="urn:adsk.eagle:package:9880/1" override_package3d_urn="urn:adsk.eagle:package:27579040/2" override_package_urn="urn:adsk.eagle:footprint:9854/1"/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
-<part name="MOD1" library="SD-Card-Module_CATALEX" deviceset="CARD-SD-ADAPTER-CATALEX" device=""/>
-<part name="U$1" library="GY-BMP280" deviceset="GY-BPM280" device=""/>
+<part name="MOD1" library="SD-Card-Module_CATALEX" deviceset="CARD-SD-ADAPTER-CATALEX" device="" override_package3d_urn="urn:adsk.eagle:package:27578933/2" override_package_urn="urn:adsk.eagle:footprint:27578934/1"/>
+<part name="U$1" library="GY-BMP280" deviceset="GY-BPM280" device="" override_package3d_urn="urn:adsk.eagle:package:27578991/2" override_package_urn="urn:adsk.eagle:footprint:27578992/1"/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -5785,13 +5785,13 @@ W = angled&lt;p&gt;
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GNDA" device=""/>
-<part name="M1" library="diy-modules" deviceset="ARDUINO-PRO-MINI-*" device="" technology="5.0V"/>
+<part name="M1" library="diy-modules" deviceset="ARDUINO-PRO-MINI-*" device="" override_package3d_urn="urn:adsk.eagle:package:27578921/2" override_package_urn="urn:adsk.eagle:footprint:27578923/1" technology="5.0V"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GNDA" device=""/>
-<part name="3_PIN_HEADER" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
+<part name="3_PIN_HEADER" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1" override_package3d_urn="urn:adsk.eagle:package:27578999/2" override_package_urn="urn:adsk.eagle:footprint:8281/1"/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="SLIDING_SWITCH" library="switch" library_urn="urn:adsk.eagle:library:380" deviceset="TL36PO" device="" package3d_urn="urn:adsk.eagle:package:27745/1"/>
+<part name="SLIDING_SWITCH" library="switch" library_urn="urn:adsk.eagle:library:380" deviceset="TL36PO" device="" package3d_urn="urn:adsk.eagle:package:27745/1" override_package3d_urn="urn:adsk.eagle:package:27579032/2" override_package_urn="urn:adsk.eagle:footprint:27631/1"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="10"/>
 <part name="+3V5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 </parts>
@@ -6108,6 +6108,11 @@ will not be understood (or retained) with this version.
 Since Version 8.3, EAGLE supports the association of 3D packages
 with devices in libraries, schematics, and board files. Those 3D
 packages will not be understood (or retained) with this version.
+</note>
+<note version="9.4" severity="warning">
+Since Version 9.4, EAGLE supports the overriding of 3D packages
+in schematics and board files. Those overridden 3d packages
+will not be understood (or retained) with this version.
 </note>
 <note version="8.4" severity="warning">
 Since Version 8.4, EAGLE supports properties for SPICE simulation. 
